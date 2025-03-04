@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+import in.dataman.donation.comcontroller.SseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,8 @@ public class JwtHelper {
     private final PublicKey publicKey;
     @Autowired
     private SessionManagementService sessionManagementService;
-    
+    @Autowired
+    private SseController sseController;
     
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -63,7 +65,7 @@ public class JwtHelper {
                 .compact();
 
         sessionManagementService.storeSession(userId, token,JWT_TOKEN_VALIDITY);
-         
+        sseController.notifyTokenUpdate(userId);
         return token;
     }
 

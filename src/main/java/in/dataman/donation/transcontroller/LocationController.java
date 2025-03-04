@@ -33,63 +33,63 @@ public class LocationController {
 	private AuthKeyUtil authKeyUtil;
 
 	@GetMapping("/countries")
-	public ResponseEntity<?> getCountries(@RequestHeader("authKey") String authKey) {
+	public ResponseEntity<?> getCountries() {
 
-		//====================================================================================================================
-		try{
-			authKey = encryptionDecryptionUtil.decrypt(authKey);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		if (authKeyUtil.getAuthKey(authKey) == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
-		}
-
-		authKeyUtil.deleteAuthKey(authKey);
-		HttpHeaders headers = new HttpHeaders();
-		String id = authKeyUtil.generateAuthKey();
-		authKeyUtil.storeAuthKey(id, 60*60*1000);
-		String encryptedAuthKey = null;
-		try{
-			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		headers.add("authKey", encryptedAuthKey);
-		//====================================================================================================================
+//		//====================================================================================================================
+//		try{
+//			authKey = encryptionDecryptionUtil.decrypt(authKey);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//		if (authKeyUtil.getAuthKey(authKey) == null) {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
+//		}
+//
+//		authKeyUtil.deleteAuthKey(authKey);
+//		HttpHeaders headers = new HttpHeaders();
+//		String id = authKeyUtil.generateAuthKey();
+//		authKeyUtil.storeAuthKey(id, 60*60*1000);
+//		String encryptedAuthKey = null;
+//		try{
+//			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//		headers.add("authKey", encryptedAuthKey);
+//		//====================================================================================================================
 		List<Country> countries = locationService.getAllCountries();
 		//return PayloadEncryptionDecryptionUtil.encryptResponse(countries,encryptionDecryptionUtil);
 
 		Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(countries,encryptionDecryptionUtil);
 
-		return ResponseEntity.ok().headers(headers).body(result);
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/states")
-	public ResponseEntity<?> getStates(@RequestHeader("authKey") String authKey) {
+	public ResponseEntity<?> getStates() {
 
 
 		//====================================================================================================================
-		try{
-			authKey = encryptionDecryptionUtil.decrypt(authKey);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		if (authKeyUtil.getAuthKey(authKey) == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
-		}
-
-		authKeyUtil.deleteAuthKey(authKey);
-		HttpHeaders headers = new HttpHeaders();
-		String id = authKeyUtil.generateAuthKey();
-		authKeyUtil.storeAuthKey(id, 60*60*1000);
-		String encryptedAuthKey = null;
-		try{
-			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		headers.add("authKey", encryptedAuthKey);
+//		try{
+//			authKey = encryptionDecryptionUtil.decrypt(authKey);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//		if (authKeyUtil.getAuthKey(authKey) == null) {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
+//		}
+//
+//		authKeyUtil.deleteAuthKey(authKey);
+//		HttpHeaders headers = new HttpHeaders();
+//		String id = authKeyUtil.generateAuthKey();
+//		authKeyUtil.storeAuthKey(id, 60*60*1000);
+//		String encryptedAuthKey = null;
+//		try{
+//			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//		headers.add("authKey", encryptedAuthKey);
 		//====================================================================================================================
 
 
@@ -99,84 +99,83 @@ public class LocationController {
 
 		Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(states,encryptionDecryptionUtil);
 
-		return ResponseEntity.ok().headers(headers).body(result);
+		return ResponseEntity.ok(result);
 
     }
 
 	@GetMapping("/cities")
 	public ResponseEntity<?> getCities(@RequestParam String stateCode, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "25") int size, @RequestHeader("authKey") String authKey) {
+			@RequestParam(defaultValue = "25") int size) {
 
 		//====================================================================================================================
-		try{
-			authKey = encryptionDecryptionUtil.decrypt(authKey);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		if (authKeyUtil.getAuthKey(authKey) == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
-		}
-
-		authKeyUtil.deleteAuthKey(authKey);
-		HttpHeaders headers = new HttpHeaders();
-		String id = authKeyUtil.generateAuthKey();
-		authKeyUtil.storeAuthKey(id, 60*60*1000);
-		String encryptedAuthKey = null;
-		try{
-			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		headers.add("authKey", encryptedAuthKey);
+//		try{
+//			authKey = encryptionDecryptionUtil.decrypt(authKey);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//		if (authKeyUtil.getAuthKey(authKey) == null) {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
+//		}
+//
+//		authKeyUtil.deleteAuthKey(authKey);
+//		HttpHeaders headers = new HttpHeaders();
+//		String id = authKeyUtil.generateAuthKey();
+//		authKeyUtil.storeAuthKey(id, 60*60*1000);
+//		String encryptedAuthKey = null;
+//		try{
+//			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
+//		headers.add("authKey", encryptedAuthKey);
 		//====================================================================================================================
 	
 		//return PayloadEncryptionDecryptionUtil.encryptResponse(locationService.getCitiesByState(stateCode, page, size), encryptionDecryptionUtil);
 		Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(locationService.getCitiesByState(stateCode, page, size),encryptionDecryptionUtil);
 
-		return ResponseEntity.ok().headers(headers).body(result);
+		return ResponseEntity.ok(result);
 	}
 	
 	@GetMapping("/cities-name")
 	public ResponseEntity<?> getCities(
-	        @RequestParam String stateCode, @RequestHeader("authKey") String authKey,
+	        @RequestParam String stateCode,
 	        @RequestParam(required = false) String namePrefix,
 	        @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "25") int size) {
 
 
 		//====================================================================================================================
-		try{
-			authKey = encryptionDecryptionUtil.decrypt(authKey);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		if (authKeyUtil.getAuthKey(authKey) == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
-		}
-
-		authKeyUtil.deleteAuthKey(authKey);
-		HttpHeaders headers = new HttpHeaders();
-		String id = authKeyUtil.generateAuthKey();
-		authKeyUtil.storeAuthKey(id, 60*60*1000);
-		String encryptedAuthKey = null;
-		try{
-			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		headers.add("authKey", encryptedAuthKey);
+//		try{
+////			authKey = encryptionDecryptionUtil.decrypt(authKey);
+////		}catch (Exception e){
+////			e.printStackTrace();
+////		}
+////		if (authKeyUtil.getAuthKey(authKey) == null) {
+////			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
+////		}
+////
+////		authKeyUtil.deleteAuthKey(authKey);
+////		HttpHeaders headers = new HttpHeaders();
+////		String id = authKeyUtil.generateAuthKey();
+////		authKeyUtil.storeAuthKey(id, 60*60*1000);
+////		String encryptedAuthKey = null;
+////		try{
+////			encryptedAuthKey = encryptionDecryptionUtil.encrypt(id);
+////		}catch (Exception e){
+////			e.printStackTrace();
+////		}
+////		headers.add("authKey", encryptedAuthKey);
 		//====================================================================================================================
 
 
 		Page<City> cities = locationService.getCitiesByStateS(stateCode, namePrefix, page, size);
 
 
+		//return PayloadEncryptionDecryptionUtil.encryptResponse(cities,encryptionDecryptionUtil);
 
-	    //return PayloadEncryptionDecryptionUtil.encryptResponse(cities,encryptionDecryptionUtil);
+		Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(cities, encryptionDecryptionUtil);
 
-		Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(cities,encryptionDecryptionUtil);
-
-		return ResponseEntity.ok().headers(headers).body(result);
+		return ResponseEntity.ok(result);
 	}
 
 }

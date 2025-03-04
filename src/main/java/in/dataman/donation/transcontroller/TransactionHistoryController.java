@@ -64,7 +64,7 @@ public class TransactionHistoryController {
 		List<DonationTransactionHistroyDTO> history = transactionHistorySrv.getTransactionHistory(data, nature);
 
 		if (history.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(history);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(headers).body(history);
 		}
 
 		Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(history,encryptionDecryptionUtil);
@@ -102,7 +102,7 @@ public class TransactionHistoryController {
 
 		List<PatientTransactionHistroyDTO> history = transactionHistorySrv.getPatientTransactionHistory(data, nature);
 		if (history.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(history);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(headers).body(history);
 		}
 
 
@@ -145,7 +145,7 @@ public class TransactionHistoryController {
 				.getAdminDonationTransactionHistory(toDate, fromDate);
 
 		if (transactions.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(transactions);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(headers).body(transactions);
 		}
 
 		//return PayloadEncryptionDecryptionUtil.encryptResponse(transactions,encryptionDecryptionUtil);
@@ -188,7 +188,7 @@ public class TransactionHistoryController {
 				.getAdminPatientTransactionHistory(toDate, fromDate);
 		
 		if (transactions.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(transactions);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).headers(headers).body(transactions);
 		}
 
 		//return PayloadEncryptionDecryptionUtil.encryptResponse(transactions,encryptionDecryptionUtil);

@@ -15,4 +15,5 @@ public class AdminPatientTransactionHistroyDTO {
 	private String docId;
 	private String paymentId;
 	private String email;
+	private String patientEmail;
 }

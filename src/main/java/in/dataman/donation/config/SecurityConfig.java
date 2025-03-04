@@ -31,7 +31,7 @@ public class SecurityConfig {
 						"/api/v1/patient", "/api/v1/getDonation", "/api/v1/getPatient", "/api/v1/countries",
 						"/api/v1/cities", "/api/v1/cities-name", "/api/v1/submit", "/api/v1/order", "/api/v1/verify",
 						"/api/v1/payment-gateway", "/api/v1/admin-donation-transactions",
-						"/api/v1/admin-patient-transactions", "/api/v1/transactions", "/api/v1/PatientTransactions",
+						"/api/v1/admin-patient-transactions", "/api/v1/transactions", "/api/v1/PatientTransactions","/api/v1/subscribe",
 						"/api/v1/payment-receipts", "/api/v1/patient-receipts", "/api/v1/auth/generate-captcha","/encrypt-object-and-send-map","/decrypt-and-convert-to-dto","/decrypt-request","/encryption-request",
 						"/api/v1/auth/verify-captcha", "/swagger-ui/**", "/v3/api-docs/**")
 				.permitAll().anyRequest().authenticated())

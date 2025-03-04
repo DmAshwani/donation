@@ -121,7 +121,7 @@ public class TransactionHistorySrv {
     @SuppressWarnings("deprecation")
     public List<AdminPatientTransactionHistroyDTO> getAdminPatientTransactionHistory(String toDate, String fromDate) {
         String sql = "SELECT d.recId, d.v_Date, d.mobile, d.patientName, d.patientEMRNo, d.surgeryDate, d.amount, d.status, d.docId, pd.resBankTransrefNo, "
-                + "d.email "
+                + "d.email,d.patientEmail "
                 + "FROM donation d "
                 + "LEFT JOIN voucher_Type vt ON vt.v_Type = d.v_Type "
                 + "LEFT JOIN paymentDetail pd ON pd.id = d.paymentId "
@@ -144,6 +144,7 @@ public class TransactionHistorySrv {
             dto.setDocId(rs.getString("docId"));
             dto.setPaymentId(rs.getString("resBankTransrefNo"));
             dto.setEmail(rs.getString("email"));
+            dto.setPatientEmail(rs.getString("patientEmail"));
             // Map integer status to PaymentStatus enum
             int statusValue = rs.getInt("status");
             PaymentStatus paymentStatus = getPaymentStatusByCode(statusValue);

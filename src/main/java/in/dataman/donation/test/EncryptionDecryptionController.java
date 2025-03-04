@@ -92,8 +92,11 @@ public class EncryptionDecryptionController {
         response.setUserId("userid");
         response.setGender("male");
 
-        // Use the utility method to encrypt response
-        return PayloadEncryptionDecryptionUtil.encryptResponse(response, encryptionDecryptionUtil);
+        Map<String, String> result = PayloadEncryptionDecryptionUtil.encryptResponse(response, encryptionDecryptionUtil);
+
+        // Use the utility method to encrypt response\
+
+        return ResponseEntity.ok(result);
     }
 
 

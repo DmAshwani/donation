@@ -292,7 +292,16 @@ public class DonationService {
 	        paymentDetail.setStatus(PaymentStatus.AppInitiated.getCode());
 	        paymentDetailRepository.save(paymentDetail);
 
-	        Map<String, String> resTrId = new HashMap<>();
+			Optional<PaymentDetail> pdoptional = paymentDetailRepository.findByResTransRefId(razorpayOrderId);
+
+			pdoptional.ifPresent(pd -> {
+				donation.setPaymentId(pd.getId());  // Set payment ID
+				donationRepository.save(donation);  // Re-save donation with updated paymentId
+			});
+
+
+
+			Map<String, String> resTrId = new HashMap<>();
 	        resTrId.put("OrderId", razorpayOrderId);
 	        return resTrId;
 	    } catch (Exception ex) {

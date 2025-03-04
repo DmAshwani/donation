@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import dataman.dmbase.encryptiondecryptionutil.EncryptionDecryptionUtil;
 import dataman.dmbase.encryptiondecryptionutil.EncryptionDecryptionUtilNew;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -56,6 +55,7 @@ public class LoginController {
     
     @Autowired
     private UserMastRepository userMastRepository;
+
 
     private static final Pattern MOBILE_PATTERN = Pattern.compile("^[6-9]\\d{9}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
@@ -184,7 +184,6 @@ public class LoginController {
 
     @PostMapping("/get-secret-key")
     public ResponseEntity<?> getSecretKey(){
-
         Map<String, Object> response = new HashMap<>();
         response.put("secretKey1", encryptionDecryptionUtilNew.getSecretKey());
         response.put("secretKey2", encryptionDecryptionUtilNew.getSecretKey());
@@ -196,6 +195,5 @@ public class LoginController {
 
         System.out.println(response.get("secretKey1"));
         return ResponseEntity.ok(response.get("secretKey1"));
-
     }
 }
