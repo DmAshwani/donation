@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+
+import dataman.dmbase.dto.RecId;
+import dataman.dmbase.server.DmBaseServer;
 import in.dataman.donation.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +40,6 @@ import in.dataman.donation.transrepository.RegistrationRepository;
 import in.dataman.donation.transrepository.StateRepository;
 import in.dataman.donation.uitl.DmBaseService;
 import in.dataman.donation.uitl.MD5Util;
-import in.dataman.donation.uitl.RecId;
 import in.dataman.donation.uitl.TimeConverter;
 
 @Service
@@ -58,6 +60,10 @@ public class DonationService {
 	@Autowired
 	@Qualifier("TransactionJdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private DmBaseServer dmBaseServer;
+
 
 	public DonationService(UserMastRepository userMastRepository, MD5Util md5Util,
 			RegistrationRepository registrationRepository, DonationRepository donationRepository,
@@ -83,10 +89,6 @@ public class DonationService {
 			boolean mobileExists = userMastRepository.existsByMobile(donationDTO.getMobile());
 			boolean emailExists = userMastRepository.existsByeMail(donationDTO.getEmail());
 
-			System.out.println("//////////////////////////////////////////////");
-			System.out.println("Mobile exists "+mobileExists);
-			System.out.println("Email Exists "+emailExists);
-			System.out.println("//////////////////////////////////////////////");
 			String uNamePrefix;
 			Registration registration;
 			Long codereg;
@@ -103,7 +105,8 @@ public class DonationService {
 				userMast.setUser_Role(UserRole.External.getDescription());
 				userMastRepository.save(userMast);
 
-				codereg = Long.parseLong(dmBaseService.getSerialNoBigInt("1", "registration"));
+//				codereg = Long.parseLong(dmBaseService.getSerialNoBigInt("1", "registration"));
+				codereg = Long.valueOf(dmBaseServer.getSerialNoBigInt("1","registration", jdbcTemplate));
 				registration = donationDTO.toRegistration();
 				registration.setCode(codereg);
 				registration.setUserId(uNamePrefix);
@@ -144,11 +147,19 @@ public class DonationService {
 
 			Integer voucherType = fetchVoucherType("DO");
 			String v_Prefix = dmBaseService.fetchVoucherPrefix(donationDTO.getPreparedDt());
-			Long docId = Long.parseLong(dmBaseService.getDocId(voucherType.toString(), v_Prefix, "1"));
+//			Long docId = Long.parseLong(dmBaseService.getDocId(voucherType.toString(), v_Prefix, "1"));
 
-			RecId recId = dmBaseService.getRecId("donation", "docId", docId.toString(), "recId", new RecId(),
+			Long docId = Long.valueOf(dmBaseServer.getDocId(voucherType.toString(), v_Prefix, "1", jdbcTemplate));
+
+
+//			RecId recId = dmBaseService.getRecId("donation", "docId", docId.toString(), "recId", new RecId(),
+//					convertUnixTimestampToDate(donationDTO.getPreparedDt()), "v_Type", voucherType.toString(), v_Prefix,
+//					"1", "HO", "1", true, null);
+
+			RecId recId = dmBaseServer.getRecId("donation", "docId", docId.toString(), "recId", new RecId(),
 					convertUnixTimestampToDate(donationDTO.getPreparedDt()), "v_Type", voucherType.toString(), v_Prefix,
-					"1", "HO", "1", true, null);
+					"1", "HO", "1", true, null, jdbcTemplate);
+
 
 			Donation donation = donationDTO.toDonation();
 			donation.setDocId(docId);
@@ -250,9 +261,9 @@ public class DonationService {
 	        String v_Prefix = dmBaseService.fetchVoucherPrefix(patientDTO.getPreparedDt());
 	        Long docId = Long.parseLong(dmBaseService.getDocId(voucherType.toString(), v_Prefix, "1"));
 
-	        RecId recId = dmBaseService.getRecId("donation", "docId", docId.toString(), "recId", new RecId(),
-	                convertUnixTimestampToDate(patientDTO.getPreparedDt()), "v_Type", voucherType.toString(), v_Prefix,
-	                "1", "HO", "1", true, null);
+			RecId recId = dmBaseServer.getRecId("donation", "docId", docId.toString(), "recId", new RecId(),
+					convertUnixTimestampToDate(patientDTO.getPreparedDt()), "v_Type", voucherType.toString(), v_Prefix,
+					"1", "HO", "1", true, null, jdbcTemplate);
 
 	        Donation donation = patientDTO.toDonation();
 	        donation.setPatientName(patientDTO.getPatientName());
@@ -333,16 +344,8 @@ public class DonationService {
 		Registration registration = registrationOpt.get();
 
 		DonationDTO donationDTO = new DonationDTO();
-//		donationDTO.setFullName(registration.getName());
-//		donationDTO.setAddress1(registration.getAdd1());
-//		donationDTO.setAddress2(registration.getAdd2());
-//		donationDTO.setSelectedCountry(getCodeAndNameByCode(registration.getCountryCode().toString()));
-//		donationDTO.setSelectedState(getStateCodeAndName(registration.getStateCode().toString()));
-//		donationDTO.setSelectedDistrict(getCodeAndNameBycityCode(registration.getCityCode().toString()));
 		donationDTO.setMobile(registration.getMobile());
 		donationDTO.setEmail(registration.getEmail());
-//		donationDTO.setPanNumber(registration.getPan());
-//		donationDTO.setPincode(registration.getPin());
 
 		return donationDTO;
 	}

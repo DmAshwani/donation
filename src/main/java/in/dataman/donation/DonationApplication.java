@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"in.dataman", "dataman.dmbase.encryptiondecryptionutil"})
+@ComponentScan(basePackages = {"in.dataman", "dataman.dmbase.encryptiondecryptionutil","dataman.dmbase.server"})
 @EnableConfigurationProperties(ExternalConfig.class)
 @OpenAPIDefinition(
 			info = @Info(
